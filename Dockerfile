@@ -1,7 +1,19 @@
-FROM public.ecr.aws/lambda/python:3.10
+# Dockerfile
 
-# Copy function code
-COPY lambda_function.py ${LAMBDA_TASK_ROOT}
+# Use the official Python image as a base image
+FROM python:3.9-slim
 
-# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "lambda_function.handler" ]
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install Flask
+RUN pip install -r requirements.txt
+
+# Expose the port on which the Flask app runs
+EXPOSE 5000
+
+# Run the Flask app when the container launches
+CMD ["python", "lambda_function.py"]
